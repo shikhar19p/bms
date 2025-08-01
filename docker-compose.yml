@@ -1,0 +1,99 @@
+version: "3.9"  # Optional, can be removed in Compose v2+
+
+services:
+  postgres:
+    image: postgis/postgis:17-3.5
+    container_name: bms_postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+  postgres-test:
+    image: postgis/postgis:17-3.5
+    container_name: bms_postgres_test
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}_test
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_test:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}_test"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+  redis-stack:
+    image: redis/redis-stack:7.4.0-v6
+    container_name: redis-stack
+    ports:
+      - "6379:6379"
+      - "8001:8001"  # RedisInsight dashboard
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+    container_name: bms_elasticsearch
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl --silent --fail http://localhost:9200/_cluster/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.1
+    container_name: bms_kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+    networks:
+      - bms-network
+
+volumes:
+  pgdata:
+  pgdata_test:
+  redis_data:
+  esdata:
+
+networks:
+  bms-network:
+    driver: bridge

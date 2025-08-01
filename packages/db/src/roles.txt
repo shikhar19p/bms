@@ -1,0 +1,247 @@
+# BMSP (BookMySportz) Role Structure and Implementation Considerations
+
+Below is the refactored role structure and implementation considerations for **BMSP (BookMySportz)**, with venue-related roles now referred to as **VENUE_NAME**. This updated hierarchy ensures clear boundaries between platform-wide controls and venue-specific operations.
+
+---
+
+## 1. Role Breakdown and Permissions
+
+### BMSP_SUPER_ADMIN (Global Role)
+The **BMSP_SUPER_ADMIN** is the highest authority on the platform with complete access and control over all functions.
+
+#### Key Permissions:
+- **Manage All Administrators:**
+  - `admin:manage_super_and_bms_admins` (Exclusive to BMSP_SUPER_ADMIN)
+  - `admin:manage_platform_sub_admins`
+  - `admin:activate_deactivate_platform_admins`
+- **Verify Venues:**
+  - `venue:verify_any`
+- **Platform-Level Control:**
+  - `platform:full_oversight`
+  - `financial:manage_disbursements`
+  - `financial:process_payments`
+  - `financial:reconcile_accounts`
+  - `financial:view_all_reports`
+  - `financial:view_all_transactions`
+  - `venue:create_any`, `venue:read_any`, `venue:update_any`, `venue:delete_any`
+  - `venue:manage_venue_owners`
+  - `venue:manage_venue_staff_global`
+  - `venue:read_by_region`, `venue:update_by_region`, `venue:verify_by_region`
+  - `booking:create_any`, `booking:read_any`, `booking:update_any`, `booking:cancel_any`
+  - `user:create_any`, `user:read_any_profile`, `user:update_any_profile`, `user:delete_any`
+  - `user:manage_roles_any`
+  - `user:restrict_any`
+  - `customer_care:resolve_user_inquiry`
+  - `customer_care:view_user_booking_history`
+
+---
+
+### Sub-Roles Under BMSP_SUPER_ADMIN
+
+#### BMSP_FINANCE_ADMIN
+- **Manage Finances:**  
+  - `financial:manage_disbursements`
+  - `financial:process_payments`
+  - `financial:reconcile_accounts`
+  - `financial:view_all_reports`
+  - `financial:view_all_transactions`
+- **Limited Venue/Booking Access:**  
+  - `booking:read_any`
+  - `venue:read_any`
+
+#### BMSP_ADMIN
+- **General Administration:**  
+  - `admin:manage_platform_sub_admins`
+  - `admin:activate_deactivate_platform_admins`
+  - `platform:full_oversight`
+- **Venue Management (Global):**
+  - `venue:create_any`, `venue:read_any`, `venue:update_any`, `venue:delete_any`
+  - `venue:verify_any`
+  - `venue:manage_venue_owners`
+  - `venue:manage_venue_staff_global`
+- **Booking Management (Global):**
+  - `booking:create_any`, `booking:read_any`, `booking:update_any`, `booking:cancel_any`
+- **User Management (Global):**
+  - `user:create_any`, `user:read_any_profile`, `user:update_any_profile`, `user:delete_any`
+  - `user:manage_roles_any`
+  - `user:restrict_any`
+- **Customer Care related:**
+  - `customer_care:resolve_user_inquiry`
+  - `customer_care:view_user_booking_history`
+- **Reports:**
+  - `financial:view_all_reports`
+
+#### BMSP_VENUES_ADMIN
+- **Venue Management:**  
+  - `venue:create_any`, `venue:read_any`, `venue:update_any`, `venue:delete_any`
+  - `venue:verify_any`
+  - `venue:manage_venue_owners`
+  - `venue:manage_venue_staff_global`
+- **User Profile Access:**
+  - `user:read_any_profile`
+
+#### BMSP_REGIONAL_VENUES_ADMIN
+- **Regional Oversight:**  
+  - `venue:read_by_region`
+  - `venue:update_by_region`
+  - `venue:verify_by_region`
+- **User Profile Access:**
+  - `user:read_any_profile`
+
+#### BMSP_BOOKINGS_ADMIN
+- **Manage Bookings:**  
+  - `booking:create_any`, `booking:read_any`, `booking:update_any`, `booking:cancel_any`
+- **Venue Access:**
+  - `venue:read_any`
+- **User Profile Access:**
+  - `user:read_any_profile`
+
+#### BMSP_CUSTOMER_CARE
+- **User Assistance:**  
+  - `customer_care:resolve_user_inquiry`
+  - `customer_care:view_user_booking_history`
+- **Booking Access:**
+  - `booking:read_any`
+- **User Profile Access:**
+  - `user:read_any_profile`
+- **Venue Access:**
+  - `venue:read_any`
+
+---
+
+### VENUE_NAME Management Roles
+
+#### VENUE_OWNER (Venue Owner Role)
+The **VENUE_OWNER** acts as the venue owner and has comprehensive authority over their specific **VENUE_NAME**.
+
+##### Key Permissions:
+- **Venue Management:**
+  - `venue:create_own`, `venue:read_own`, `venue:update_own`
+  - `venue:manage_staff_own_venue`
+- **Booking Oversight:**
+  - `booking:read_for_own_venue`, `booking:update_for_own_venue`, `booking:cancel_for_own_venue`
+- **User Control:**
+  - `venue:restrict_users_on_own_venue`
+- **Financial Reports:**
+  - `financial:view_own_venue_reports`
+- **Profile Management:**
+  - `user:read_own_profile`, `user:update_own_profile`
+
+##### Sub-Roles for VENUE_OWNER:
+
+- **SECONDARY_VENUE_NAME_MANAGER:**
+  - **Full Venue Authority:**  
+    - `venue:read_own`, `venue:update_own`
+    - `booking:read_for_own_venue`, `booking:update_for_own_venue`, `booking:cancel_for_own_venue`
+    - `financial:view_own_venue_reports`
+- **VENUE_OPERATIONS_MANAGER:**
+  - **Venue-Specific Management:**  
+    - `venue:read_own`, `venue:update_own`
+    - `venue:manage_own_operations`
+    - `booking:read_for_own_venue`
+- **VENUE_BOOKING_MANAGER:**
+  - **Booking-Specific Role:**  
+    - `venue:read_own`
+    - `booking:read_for_own_venue`, `booking:update_for_own_venue`, `booking:cancel_for_own_venue`
+    - `booking:create_own`
+
+---
+
+### USER (Normal Users)
+- **Browse and Search:**  
+  - (Implied by general access, no specific permission key)
+- **Booking Interactions:**  
+  - `booking:create_own`, `booking:read_own`, `booking:update_own`, `booking:cancel_own`
+- **Profile Management:**
+  - `user:read_own_profile`, `user:update_own_profile`
+
+---
+
+### SYSTEM (Automated Processes)
+- **Automated Actions:**
+  - Has all permissions (`permissions.map(p => p.key)`) for internal operations.
+
+### ANONYMOUS (Unauthenticated Actions)
+- **Public Access:**
+  - No explicit permissions.
+
+
+---
+
+## 2. Detailed Role Hierarchy Overview
+
+- BMSP_SUPER_ADMIN
+  - BMSP_FINANCE_ADMIN
+  - BMSP_ADMIN
+  - BMSP_VENUES_ADMIN
+    - BMSP_REGIONAL_VENUES_ADMIN
+    - BMSP_BOOKINGS_ADMIN
+    - BMSP_CUSTOMER_CARE
+  - VENUE_OWNER
+    - SECONDARY_VENUE_NAME_MANAGER
+    - VENUE_OPERATIONS_MANAGER
+    - VENUE_BOOKING_MANAGER
+- USER
+- SYSTEM
+- ANONYMOUS
+Each role and sub-role is assigned specific permissions, ensuring that platform-wide and venue-specific operations remain well segmented and controlled.
+
+3. Implementation Considerations
+Role-Based Access Control (RBAC):
+Database Schema:
+
+Roles Table:
+Store roles such as BMSP_SUPER_ADMIN, BMSP_ADMIN, VENUE_OWNER, etc.
+Permissions Table:
+Define permissions (e.g., manageBookings, createVENUE_NAME, verifyVENUE_NAME, etc.) associated with each role.
+UserRoles Association:
+Map users to one or multiple roles using a join table.
+Dynamic Configuration:
+Use a configuration or JSON field for dynamic settings, such as the maximum number of sub-managers a VENUE_OWNER can create.
+Middleware for Role Validation:
+
+Create middleware that checks a user’s assigned roles and permissions before accessing specific routes.
+For example, a route to create a new VENUE_NAME should only be accessible to a VENUE_OWNER or higher.
+
+// Example pseudo-code for middleware:
+function authorize(requiredPermission) {
+  return (req, res, next) => {
+    const userPermissions = req.user.roles.flatMap(role => role.permissions);
+    if (userPermissions.includes(requiredPermission)) {
+      next();
+    } else {
+      res.status(403).json({ error: 'Access denied.' });
+    }
+  };
+}
+
+Audit and Activity Logs:
+Logging Critical Actions:
+Track high-privilege actions (e.g., by BMSP_SUPER_ADMIN or VENUE_OWNER) with detailed logs including user ID, timestamp, and action type.
+Benefits:
+Enhances accountability.
+Aids in detecting misuse or errors across the system.
+Conflict Resolution and Overrides:
+Defining Clear Protocols:
+Establish procedures for handling conflicts where roles might have overlapping permissions (e.g., booking disputes between VENUE_OWNER and SECONDARY_VENUE_NAME_MANAGER).
+Emergency Overrides:
+Allow temporary escalation or override capabilities for critical scenarios (e.g., fraud or emergency interventions) managed by BMSP_SUPER_ADMIN.
+VENUE_NAME Verification Workflow and Regional Segmentation:
+Multi-Level Verification:
+Determine whether the verification process follows a sequential path (e.g., regional verification by BMSP_REGIONAL_VENUES_ADMIN followed by final approval from BMSP_SUPER_ADMIN) or if a single role can finalize verification.
+Regional Boundaries:
+Clearly define regions for BMSP_REGIONAL_VENUES_ADMIN responsibilities.
+Enable users to filter or search VENUE_NAME listings by region, aligning with the responsibilities of regional admins.
+Customizable Permissions for Sub-Roles:
+Tailored Access:
+Allow VENUE_OWNER to customize permissions for sub-roles (e.g., specifying which venue details a VENUE_OPERATIONS_MANAGER can modify).
+User Interface:
+Provide an intuitive interface for managing these customizable settings to ensure clarity and prevent misuse.
+Notification and Communication Framework:
+Real-Time Alerts:
+Implement notifications (via email, SMS, or in-app messaging) for critical updates such as booking status changes, verification results, or fraud alerts.
+Stakeholder Updates:
+Ensure that both venue-level admins and platform-level admins are informed about significant events.
+Aggregate Analytics for Platform Insights:
+Data Consolidation:
+While VENUE_OWNER and their sub-roles access detailed analytics for individual venues, develop dashboards for BMSP_ADMIN and BMSP_SUPER_ADMIN to view aggregated data across the entire platform.

@@ -1,0 +1,30 @@
+{
+  "name": "ws-backend",
+  "version": "1.0.0",
+  "description": " WebSocket backend service for BookMySportz",
+  "main": "index.js",
+  "dependencies": {
+    "@types/uuid": "^10.0.0",
+    "uuid": "^11.1.0",
+    "ws": "^8.18.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/ws": "^8.18.1",
+    "@workspace/backend-common": "workspace:*",
+    "@workspace/common": "workspace:*",
+    "@workspace/db": "workspace:*",
+    "@workspace/eslint-config": "workspace:^",
+    "@workspace/typescript-config": "workspace:*",
+    "nodemon": "^3.1.10",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

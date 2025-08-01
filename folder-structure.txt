@@ -1,0 +1,705 @@
+bms-monorepo
+├── -p
+├── CONTRIBUTING.md
+├── README.md
+├── TEAMCONTRIBUTING.md
+├── apps
+│   ├── admin-web
+│   │   ├── README.md
+│   │   ├── components.json
+│   │   ├── eslint.config.js
+│   │   ├── next-env.d.ts
+│   │   ├── next.config.mjs
+│   │   ├── node_modules
+│   │   │   ├── @eslint
+│   │   │   │   └── eslintrc
+│   │   │   ├── @tailwindcss
+│   │   │   │   └── postcss
+│   │   │   ├── @types
+│   │   │   │   ├── node
+│   │   │   │   ├── react
+│   │   │   │   ├── react-dom
+│   │   │   │   └── recharts
+│   │   │   ├── @workspace
+│   │   │   │   ├── typescript-config
+│   │   │   │   └── ui
+│   │   │   ├── chart.js
+│   │   │   ├── eslint
+│   │   │   ├── eslint-config-next
+│   │   │   ├── framer-motion
+│   │   │   ├── lucide-react
+│   │   │   ├── next
+│   │   │   ├── next-themes
+│   │   │   ├── react
+│   │   │   ├── react-chartjs-2
+│   │   │   ├── react-dom
+│   │   │   ├── recharts
+│   │   │   ├── tailwindcss
+│   │   │   └── typescript
+│   │   ├── package.json
+│   │   ├── postcss.config.mjs
+│   │   ├── public
+│   │   │   └── images
+│   │   │       └── logo
+│   │   │           └── logo-big-dark.png
+│   │   ├── src
+│   │   │   ├── app
+│   │   │   │   ├── favicon.ico
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── not-found.tsx
+│   │   │   │   ├── page.tsx
+│   │   │   │   └── venue-name-admin
+│   │   │   │       ├── analytics
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── bookings
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── customers
+│   │   │   │       │   └── page.tsx
+│   │   │   │       ├── dashboard
+│   │   │   │       │   └── page.tsx
+│   │   │   │       └── onboard
+│   │   │   │           └── identity-verification
+│   │   │   │               └── page.tsx
+│   │   │   ├── components
+│   │   │   │   ├── providers.tsx
+│   │   │   │   └── venue-admin
+│   │   │   │       ├── bookings-table.tsx
+│   │   │   │       ├── chart.tsx
+│   │   │   │       ├── mobile-nav.tsx
+│   │   │   │       ├── navbar.tsx
+│   │   │   │       ├── sidebar.tsx
+│   │   │   │       ├── site-footer.tsx
+│   │   │   │       ├── site-header.tsx
+│   │   │   │       ├── stats-card.tsx
+│   │   │   │       └── venue-admin-list.tsx
+│   │   │   ├── hooks
+│   │   │   └── lib
+│   │   └── tsconfig.json
+│   ├── docs
+│   │   ├── next.config.ts
+│   │   └── node_modules
+│   │       └── @tailwindcss
+│   │           └── oxide-win32-x64-msvc
+│   │               └── tailwindcss-oxide.win32-x64-msvc.node
+│   ├── http-backend
+│   │   ├── dist
+│   │   │   ├── app.d.ts
+│   │   │   ├── app.d.ts.map
+│   │   │   ├── app.js
+│   │   │   ├── controllers
+│   │   │   │   └── auth-controllers
+│   │   │   │       └── user
+│   │   │   │           ├── auth.controller.d.ts
+│   │   │   │           ├── auth.controller.d.ts.map
+│   │   │   │           ├── auth.controller.js
+│   │   │   │           ├── login.controller.d.ts
+│   │   │   │           ├── login.controller.d.ts.map
+│   │   │   │           ├── login.controller.js
+│   │   │   │           ├── password.controller.d.ts
+│   │   │   │           ├── password.controller.d.ts.map
+│   │   │   │           ├── password.controller.js
+│   │   │   │           ├── register.controller.d.ts
+│   │   │   │           ├── register.controller.d.ts.map
+│   │   │   │           └── register.controller.js
+│   │   │   ├── index.d.ts
+│   │   │   ├── index.d.ts.map
+│   │   │   ├── index.js
+│   │   │   ├── middleware
+│   │   │   │   ├── auth.d.ts
+│   │   │   │   ├── auth.d.ts.map
+│   │   │   │   ├── auth.js
+│   │   │   │   ├── auth.middlware.d.ts
+│   │   │   │   ├── auth.middlware.d.ts.map
+│   │   │   │   ├── auth.middlware.js
+│   │   │   │   ├── validate.d.ts
+│   │   │   │   ├── validate.d.ts.map
+│   │   │   │   └── validate.js
+│   │   │   ├── routes
+│   │   │   │   ├── auth
+│   │   │   │   │   └── user
+│   │   │   │   │       ├── auth.route.d.ts
+│   │   │   │   │       ├── auth.route.d.ts.map
+│   │   │   │   │       ├── auth.route.js
+│   │   │   │   │       ├── auth.route.test.d.ts
+│   │   │   │   │       ├── auth.route.test.d.ts.map
+│   │   │   │   │       └── auth.route.test.js
+│   │   │   │   ├── health.route.d.ts
+│   │   │   │   ├── health.route.d.ts.map
+│   │   │   │   ├── health.route.js
+│   │   │   │   ├── index.d.ts
+│   │   │   │   ├── index.d.ts.map
+│   │   │   │   └── index.js
+│   │   │   └── services
+│   │   │       ├── auth-service
+│   │   │       │   ├── common
+│   │   │       │   │   ├── auth.utils.d.ts
+│   │   │       │   │   ├── auth.utils.d.ts.map
+│   │   │       │   │   └── auth.utils.js
+│   │   │       │   └── user
+│   │   │       │       ├── credential.service.d.ts
+│   │   │       │       ├── credential.service.d.ts.map
+│   │   │       │       ├── credential.service.js
+│   │   │       │       ├── forgot-password.service.d.ts
+│   │   │       │       ├── forgot-password.service.d.ts.map
+│   │   │       │       ├── forgot-password.service.js
+│   │   │       │       ├── index.d.ts
+│   │   │       │       ├── index.d.ts.map
+│   │   │       │       ├── index.js
+│   │   │       │       ├── interfaces.d.ts
+│   │   │       │       ├── interfaces.d.ts.map
+│   │   │       │       ├── interfaces.js
+│   │   │       │       ├── login-with-email.service.d.ts
+│   │   │       │       ├── login-with-email.service.d.ts.map
+│   │   │       │       ├── login-with-email.service.js
+│   │   │       │       ├── login-with-google.service.d.ts
+│   │   │       │       ├── login-with-google.service.d.ts.map
+│   │   │       │       ├── login-with-google.service.js
+│   │   │       │       ├── login-with-phone.service.d.ts
+│   │   │       │       ├── login-with-phone.service.d.ts.map
+│   │   │       │       ├── login-with-phone.service.js
+│   │   │       │       ├── login.service.d.ts
+│   │   │       │       ├── login.service.d.ts.map
+│   │   │       │       ├── login.service.js
+│   │   │       │       ├── logout.service.d.ts
+│   │   │       │       ├── logout.service.d.ts.map
+│   │   │       │       ├── logout.service.js
+│   │   │       │       ├── otp.service.d.ts
+│   │   │       │       ├── otp.service.d.ts.map
+│   │   │       │       ├── otp.service.js
+│   │   │       │       ├── password.service.d.ts
+│   │   │       │       ├── password.service.d.ts.map
+│   │   │       │       ├── password.service.js
+│   │   │       │       ├── refresh-token.service.d.ts
+│   │   │       │       ├── refresh-token.service.d.ts.map
+│   │   │       │       ├── refresh-token.service.js
+│   │   │       │       ├── register-with-email.service.d.ts
+│   │   │       │       ├── register-with-email.service.d.ts.map
+│   │   │       │       ├── register-with-email.service.js
+│   │   │       │       ├── register-with-google.service.d.ts
+│   │   │       │       ├── register-with-google.service.d.ts.map
+│   │   │       │       ├── register-with-google.service.js
+│   │   │       │       ├── reset-password.service.d.ts
+│   │   │       │       ├── reset-password.service.d.ts.map
+│   │   │       │       ├── reset-password.service.js
+│   │   │       │       ├── update-password.service.d.ts
+│   │   │       │       ├── update-password.service.d.ts.map
+│   │   │       │       ├── update-password.service.js
+│   │   │       │       ├── user-auth.service.d.ts
+│   │   │       │       ├── user-auth.service.d.ts.map
+│   │   │       │       ├── user-auth.service.js
+│   │   │       │       ├── verfiy-login-with-email.service.d.ts
+│   │   │       │       ├── verfiy-login-with-email.service.d.ts.map
+│   │   │       │       ├── verfiy-login-with-email.service.js
+│   │   │       │       ├── verfiy-login-with-phone.service.d.ts
+│   │   │       │       ├── verfiy-login-with-phone.service.d.ts.map
+│   │   │       │       ├── verfiy-login-with-phone.service.js
+│   │   │       │       ├── verify-registration.service.d.ts
+│   │   │       │       ├── verify-registration.service.d.ts.map
+│   │   │       │       └── verify-registration.service.js
+│   │   │       ├── email-service
+│   │   │       │   └── auth
+│   │   │       │       └── user
+│   │   │       │           ├── email.service.d.ts
+│   │   │       │           ├── email.service.d.ts.map
+│   │   │       │           └── email.service.js
+│   │   │       └── token-service
+│   │   │           ├── auth
+│   │   │           │   ├── auth-token.service.d.ts
+│   │   │           │   ├── auth-token.service.d.ts.map
+│   │   │           │   ├── auth-token.service.js
+│   │   │           │   └── user
+│   │   │           │       ├── token.service.d.ts
+│   │   │           │       ├── token.service.d.ts.map
+│   │   │           │       └── token.service.js
+│   │   │           ├── base-token.service.d.ts
+│   │   │           ├── base-token.service.d.ts.map
+│   │   │           ├── base-token.service.js
+│   │   │           ├── index.d.ts
+│   │   │           ├── index.d.ts.map
+│   │   │           ├── index.js
+│   │   │           └── verification
+│   │   │               ├── verification-token.service.d.ts
+│   │   │               ├── verification-token.service.d.ts.map
+│   │   │               └── verification-token.service.js
+│   │   ├── logs
+│   │   │   ├── debug.log
+│   │   │   ├── error.1.log
+│   │   │   ├── error.2.log
+│   │   │   ├── error.4.log
+│   │   │   ├── error.6.log
+│   │   │   ├── error.7.log
+│   │   │   ├── error.log
+│   │   │   ├── fatal.log
+│   │   │   ├── info.log
+│   │   │   ├── success.log
+│   │   │   └── warn.log
+│   │   ├── node_modules
+│   │   │   ├── @types
+│   │   │   │   ├── cls-hooked
+│   │   │   │   ├── compression
+│   │   │   │   ├── cookie-parser
+│   │   │   │   ├── cors
+│   │   │   │   ├── express
+│   │   │   │   ├── hpp
+│   │   │   │   ├── jsonwebtoken
+│   │   │   │   ├── node
+│   │   │   │   ├── nodemailer
+│   │   │   │   └── validator
+│   │   │   ├── @workspace
+│   │   │   │   ├── backend-common
+│   │   │   │   ├── common
+│   │   │   │   ├── db
+│   │   │   │   └── typescript-config
+│   │   │   ├── bcryptjs
+│   │   │   ├── cls-hooked
+│   │   │   ├── compression
+│   │   │   ├── cookie-parser
+│   │   │   ├── cors
+│   │   │   ├── dotenv
+│   │   │   ├── express
+│   │   │   ├── google-auth-library
+│   │   │   ├── googleapis
+│   │   │   ├── helmet
+│   │   │   ├── hpp
+│   │   │   ├── jsonwebtoken
+│   │   │   ├── nodemailer
+│   │   │   ├── nodemon
+│   │   │   ├── passport-google-oauth20
+│   │   │   ├── redis
+│   │   │   ├── ts-node
+│   │   │   ├── ts-node-dev
+│   │   │   ├── twilio
+│   │   │   ├── typescript
+│   │   │   ├── validator
+│   │   │   ├── xss-clean
+│   │   │   └── zod
+│   │   ├── nodemon.json
+│   │   ├── package.json
+│   │   ├── src
+│   │   │   ├── app.ts
+│   │   │   ├── controllers
+│   │   │   │   ├── auth
+│   │   │   │   │   ├── account.controller.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── login.controller.ts
+│   │   │   │   │   ├── mfa.controller.ts
+│   │   │   │   │   └── register.controller.ts
+│   │   │   │   └── auth-controllers
+│   │   │   │       ├── admin
+│   │   │   │       └── user
+│   │   │   │           ├── auth.controller.ts
+│   │   │   │           ├── email-verification.controller.ts
+│   │   │   │           ├── login.controller.ts
+│   │   │   │           ├── password.controller.ts
+│   │   │   │           └── register-with-email.controller.ts
+│   │   │   ├── index.ts
+│   │   │   ├── middleware
+│   │   │   │   ├── auth.middlware.ts
+│   │   │   │   ├── auth.ts
+│   │   │   │   └── validate.ts
+│   │   │   ├── routes
+│   │   │   │   ├── auth
+│   │   │   │   │   └── user
+│   │   │   │   │       ├── auth.route.test.ts
+│   │   │   │   │       └── auth.route.ts
+│   │   │   │   ├── health.route.ts
+│   │   │   │   └── index.ts
+│   │   │   └── services
+│   │   │       ├── auth-service
+│   │   │       │   ├── admin
+│   │   │       │   ├── common
+│   │   │       │   │   └── auth.utils.ts
+│   │   │       │   ├── interfaces
+│   │   │       │   │   └── auth.interfaces.ts
+│   │   │       │   ├── types
+│   │   │       │   │   ├── auth.types.ts
+│   │   │       │   │   └── express.d.ts
+│   │   │       │   ├── user
+│   │   │       │   │   ├── bms-monorepo
+│   │   │       │   │   │   └── apps
+│   │   │       │   │   │       └── http-backend
+│   │   │       │   │   │           └── src
+│   │   │       │   │   ├── credential.service.ts
+│   │   │       │   │   ├── google-account-linking.service.ts
+│   │   │       │   │   ├── index.ts
+│   │   │       │   │   ├── login-email-password.service.ts
+│   │   │       │   │   ├── login-mfa.service.ts
+│   │   │       │   │   ├── login-phone.service.ts
+│   │   │       │   │   ├── login-with-google.service.ts
+│   │   │       │   │   ├── otp.service.ts
+│   │   │       │   │   ├── phone-verification.service.ts
+│   │   │       │   │   └── register-with-email.service.ts
+│   │   │       │   └── verification-service
+│   │   │       │       ├── email-verification-sender.service.ts
+│   │   │       │       ├── email-verification.service.ts
+│   │   │       │       └── index.ts
+│   │   │       ├── email-service
+│   │   │       │   ├── auth
+│   │   │       │   │   └── user
+│   │   │       │   │       └── interfaces
+│   │   │       │   │           └── email.interface.ts
+│   │   │       │   ├── base-email.service.ts
+│   │   │       │   ├── index.ts
+│   │   │       │   ├── otp-email-sender.service.ts
+│   │   │       │   └── utils
+│   │   │       │       └── email-templates.ts
+│   │   │       └── token-service
+│   │   │           ├── access-token.service.ts
+│   │   │           ├── base-token.service.ts
+│   │   │           ├── index.ts
+│   │   │           ├── password-reset-token.service.ts
+│   │   │           ├── refresh-token.service.ts
+│   │   │           ├── verification
+│   │   │           │   └── verification-token.service.ts
+│   │   │           └── verification-token.service.ts
+│   │   └── tsconfig.json
+│   ├── user-web
+│   │   ├── app
+│   │   │   ├── dashboard
+│   │   │   │   └── page.tsx
+│   │   │   ├── favicon.ico
+│   │   │   ├── layout.tsx
+│   │   │   ├── link-account
+│   │   │   │   └── page.tsx
+│   │   │   ├── login
+│   │   │   │   └── page.tsx
+│   │   │   ├── page.tsx
+│   │   │   └── settings
+│   │   │       └── page.tsx
+│   │   ├── components
+│   │   │   ├── auth
+│   │   │   │   └── google-sign-in-button.tsx
+│   │   │   └── providers.tsx
+│   │   ├── components.json
+│   │   ├── eslint.config.js
+│   │   ├── hooks
+│   │   ├── lib
+│   │   ├── next-env.d.ts
+│   │   ├── next.config.mjs
+│   │   ├── node_modules
+│   │   │   ├── @types
+│   │   │   │   ├── node
+│   │   │   │   ├── react
+│   │   │   │   └── react-dom
+│   │   │   ├── @workspace
+│   │   │   │   ├── eslint-config
+│   │   │   │   ├── typescript-config
+│   │   │   │   └── ui
+│   │   │   ├── axios
+│   │   │   ├── lucide-react
+│   │   │   ├── next
+│   │   │   ├── next-themes
+│   │   │   ├── react
+│   │   │   ├── react-dom
+│   │   │   ├── sonner
+│   │   │   └── typescript
+│   │   ├── package.json
+│   │   ├── postcss.config.mjs
+│   │   └── tsconfig.json
+│   └── ws-backend
+│       ├── dist
+│       │   ├── index.d.ts
+│       │   ├── index.d.ts.map
+│       │   └── index.js
+│       ├── node_modules
+│       │   ├── @types
+│       │   │   ├── node
+│       │   │   ├── uuid
+│       │   │   └── ws
+│       │   ├── @workspace
+│       │   │   ├── backend-common
+│       │   │   ├── common
+│       │   │   ├── db
+│       │   │   ├── eslint-config
+│       │   │   └── typescript-config
+│       │   ├── nodemon
+│       │   ├── rimraf
+│       │   ├── ts-node
+│       │   ├── typescript
+│       │   ├── uuid
+│       │   └── ws
+│       ├── nodemon.json
+│       ├── package.json
+│       ├── src
+│       │   └── index.ts
+│       └── tsconfig.json
+├── docker-compose.yml
+├── docker-entrypoint-initdb.d
+│   └── enable-postgis.sql
+├── folder-structure.txt
+├── node_modules
+│   ├── @types
+│   │   └── node
+│   ├── @workspace
+│   │   ├── eslint-config
+│   │   └── typescript-config
+│   ├── prettier
+│   ├── ts-node
+│   ├── turbo
+│   └── typescript
+├── package.json
+├── packages
+│   ├── backend-common
+│   │   ├── dist
+│   │   ├── node_modules
+│   │   │   ├── @types
+│   │   │   │   ├── cls-hooked
+│   │   │   │   ├── express
+│   │   │   │   ├── node
+│   │   │   │   ├── pg
+│   │   │   │   └── uuid
+│   │   │   ├── @workspace
+│   │   │   │   ├── db
+│   │   │   │   └── typescript-config
+│   │   │   ├── axios
+│   │   │   ├── cls-hooked
+│   │   │   ├── dotenv
+│   │   │   ├── express
+│   │   │   ├── http-status-codes
+│   │   │   ├── ioredis
+│   │   │   ├── pg
+│   │   │   ├── redis
+│   │   │   ├── twilio
+│   │   │   ├── typescript
+│   │   │   ├── uuid
+│   │   │   ├── winston
+│   │   │   ├── winston-daily-rotate-file
+│   │   │   ├── winston-elasticsearch
+│   │   │   ├── winston-transport
+│   │   │   └── zod
+│   │   ├── package.json
+│   │   ├── src
+│   │   │   ├── audit
+│   │   │   │   └── audit-service.ts
+│   │   │   ├── cache
+│   │   │   ├── config
+│   │   │   │   ├── app.config.ts
+│   │   │   │   ├── config.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── jwt.config.ts
+│   │   │   │   ├── rate-limiter-config.ts
+│   │   │   │   └── seed-db-config.ts
+│   │   │   ├── data-access
+│   │   │   │   ├── index.ts
+│   │   │   │   └── redis
+│   │   │   │       ├── index.ts
+│   │   │   │       ├── interfaces
+│   │   │   │       │   └── redis.interface.ts
+│   │   │   │       └── redis.client.ts
+│   │   │   ├── error
+│   │   │   │   ├── base
+│   │   │   │   │   ├── http-error.ts
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── domain
+│   │   │   │       ├── booking
+│   │   │   │       │   ├── index.ts
+│   │   │   │       │   └── slot-already-booked-error.ts
+│   │   │   │       ├── payment
+│   │   │   │       │   └── payment-failed-error.ts
+│   │   │   │       ├── slot
+│   │   │   │       └── venue
+│   │   │   ├── index.ts
+│   │   │   ├── logger
+│   │   │   │   ├── app-logger.ts
+│   │   │   │   ├── i-log-transport.ts
+│   │   │   │   ├── i-logger.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── log-context.ts
+│   │   │   │   ├── log-formatter.ts
+│   │   │   │   ├── log-level.ts
+│   │   │   │   ├── nodemailer-logger-adapter.ts
+│   │   │   │   └── transports
+│   │   │   │       ├── console-transport.ts
+│   │   │   │       ├── db-transport.ts
+│   │   │   │       ├── elk-tranport.ts
+│   │   │   │       └── file-transport.ts
+│   │   │   ├── metrics
+│   │   │   ├── middleware
+│   │   │   │   ├── context.ts
+│   │   │   │   ├── error-handler-middlware.ts
+│   │   │   │   ├── express.d.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── rate-limiter-middleware.ts
+│   │   │   │   ├── rate-limiter.middleware.ts
+│   │   │   │   └── request-logger.ts
+│   │   │   ├── notifications
+│   │   │   │   ├── index.ts
+│   │   │   │   └── sms
+│   │   │   │       ├── index.ts
+│   │   │   │       ├── interfaces
+│   │   │   │       │   └── sms.interface.ts
+│   │   │   │       └── twilio.sms.service.ts
+│   │   │   ├── rate-limiter
+│   │   │   │   ├── factory
+│   │   │   │   │   └── rate-limiter-factory.ts
+│   │   │   │   ├── interfaces
+│   │   │   │   │   └── i-rate-limiter.ts
+│   │   │   │   ├── middleware
+│   │   │   │   ├── strategies
+│   │   │   │   │   ├── in-memory-rate-limiter.ts
+│   │   │   │   │   ├── redis-rate-limiter.ts
+│   │   │   │   │   ├── sliding-window-log-rate-limiter.ts
+│   │   │   │   │   └── token-bucket-rate-limiter.ts
+│   │   │   │   └── utils
+│   │   │   │       └── whitelist-check.ts
+│   │   │   ├── scheduler
+│   │   │   ├── tracing
+│   │   │   ├── utils
+│   │   │   │   ├── catch-async.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── response-filter.ts
+│   │   │   └── ws
+│   │   │       ├── index.ts
+│   │   │       └── ws-context.ts
+│   │   └── tsconfig.json
+│   ├── common
+│   │   ├── node_modules
+│   │   │   ├── @types
+│   │   │   │   └── node
+│   │   │   ├── @workspace
+│   │   │   │   ├── eslint-config
+│   │   │   │   └── typescript-config
+│   │   │   ├── typescript
+│   │   │   └── zod
+│   │   ├── package.json
+│   │   ├── src
+│   │   │   ├── constants
+│   │   │   ├── domain
+│   │   │   ├── enums
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── token-type.enum.ts
+│   │   │   │   └── user-role.enum.ts
+│   │   │   ├── interfaces
+│   │   │   │   ├── express.d.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── token-payload.interface.ts
+│   │   │   ├── schema
+│   │   │   │   ├── admin
+│   │   │   │   └── user
+│   │   │   │       ├── auth.schema.ts
+│   │   │   │       └── index.ts
+│   │   │   ├── types
+│   │   │   │   ├── auth.ts
+│   │   │   │   └── index.ts
+│   │   │   └── utils
+│   │   └── tsconfig.json
+│   ├── db
+│   │   ├── node_modules
+│   │   │   ├── @prisma
+│   │   │   │   └── client
+│   │   │   ├── @types
+│   │   │   │   └── node
+│   │   │   ├── @workspace
+│   │   │   │   ├── backend-common
+│   │   │   │   └── common
+│   │   │   ├── bcryptjs
+│   │   │   ├── prisma
+│   │   │   ├── ts-node
+│   │   │   └── typescript
+│   │   ├── package.json
+│   │   ├── prisma
+│   │   │   ├── migrations
+│   │   │   │   ├── 20250715080740_bms_initial_db
+│   │   │   │   │   └── migration.sql
+│   │   │   │   └── migration_lock.toml
+│   │   │   └── schema.prisma
+│   │   ├── src
+│   │   │   ├── index.ts
+│   │   │   ├── roles.txt
+│   │   │   └── seed
+│   │   │       ├── index.ts
+│   │   │       ├── seed-bms-super-admin.ts
+│   │   │       ├── seed-permissions.ts
+│   │   │       ├── seedRolePermissions.ts
+│   │   │       └── seedRoles.ts
+│   │   └── tsconfig.json
+│   ├── eslint-config
+│   │   ├── README.md
+│   │   ├── base.js
+│   │   ├── next.js
+│   │   ├── node_modules
+│   │   │   ├── @next
+│   │   │   │   └── eslint-plugin-next
+│   │   │   ├── @typescript-eslint
+│   │   │   │   ├── eslint-plugin
+│   │   │   │   └── parser
+│   │   │   ├── eslint
+│   │   │   ├── eslint-config-prettier
+│   │   │   ├── eslint-plugin-only-warn
+│   │   │   ├── eslint-plugin-react
+│   │   │   ├── eslint-plugin-react-hooks
+│   │   │   ├── eslint-plugin-turbo
+│   │   │   ├── globals
+│   │   │   ├── typescript
+│   │   │   └── typescript-eslint
+│   │   ├── package.json
+│   │   └── react-internal.js
+│   ├── typescript-config
+│   │   ├── README.md
+│   │   ├── base.json
+│   │   ├── nextjs.json
+│   │   ├── package.json
+│   │   └── react-library.json
+│   └── ui
+│       ├── components.json
+│       ├── eslint.config.js
+│       ├── node_modules
+│       │   ├── @radix-ui
+│       │   │   ├── react-avatar
+│       │   │   ├── react-dialog
+│       │   │   ├── react-dropdown-menu
+│       │   │   ├── react-label
+│       │   │   ├── react-select
+│       │   │   └── react-slot
+│       │   ├── @tailwindcss
+│       │   │   └── postcss
+│       │   ├── @turbo
+│       │   │   └── gen
+│       │   ├── @types
+│       │   │   ├── node
+│       │   │   ├── react
+│       │   │   └── react-dom
+│       │   ├── @workspace
+│       │   │   ├── eslint-config
+│       │   │   └── typescript-config
+│       │   ├── class-variance-authority
+│       │   ├── clsx
+│       │   ├── framer-motion
+│       │   ├── lucide-react
+│       │   ├── next-themes
+│       │   ├── react
+│       │   ├── react-dom
+│       │   ├── recharts
+│       │   ├── sonner
+│       │   ├── tailwind-merge
+│       │   ├── tailwindcss
+│       │   ├── tw-animate-css
+│       │   └── typescript
+│       ├── package.json
+│       ├── postcss.config.mjs
+│       ├── src
+│       │   ├── components
+│       │   │   ├── avatar.tsx
+│       │   │   ├── badge.tsx
+│       │   │   ├── button.tsx
+│       │   │   ├── card.tsx
+│       │   │   ├── chart.tsx
+│       │   │   ├── dropdown-menu.tsx
+│       │   │   ├── input.tsx
+│       │   │   ├── label.tsx
+│       │   │   ├── select.tsx
+│       │   │   ├── sheet.tsx
+│       │   │   ├── sonner.tsx
+│       │   │   └── table.tsx
+│       │   ├── hooks
+│       │   ├── lib
+│       │   │   └── utils.ts
+│       │   └── styles
+│       │       └── globals.css
+│       ├── tsconfig.json
+│       └── tsconfig.lint.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── structure.txt
+├── tsconfig.json
+└── turbo.json

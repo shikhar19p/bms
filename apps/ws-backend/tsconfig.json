@@ -1,0 +1,4 @@
+// apps/ws-backend/tsconfig.json
+{
+  "extends": "@workspace/typescript-config/base.json"
+}

@@ -1,0 +1,584 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// ===== Account Related Enums =====
+enum AccountStatus {
+    ACTIVE
+    DEACTIVATED
+    SUSPENDED
+    PENDING
+    BLOCKED
+    VERIFIED
+    REJECTED
+}
+
+enum OnboardingStatus {
+    NOT_STARTED
+    IN_PROGRESS
+    COMPLETED
+    REJECTED
+}
+
+// ===== Account Model =====
+model Account {
+    // Basic Information
+    id                      String     @id @default(uuid())
+    name                    String?
+    phone                   String?    @unique
+    email                   String     @unique // Make email non-nullable and unique, crucial for linking
+    password                String?    // Nullable for Google-only accounts
+
+    // Password Management
+    passwordLastChanged     DateTime   @default(now())
+    passwordHistory         Json?      // Store hashed password history
+
+    // Role Information
+    roleId                  String
+    role                    Role       @relation(fields: [roleId], references: [id])
+
+    // Authentication Status
+    isEmailVerified         Boolean    @default(false)
+    isPhoneVerified           Boolean    @default(false)
+    isMfaEnabled            Boolean    @default(false)
+    mfaMethod               String?
+    loginAttempts           Int        @default(0)
+    lastLoginAttempt        DateTime?
+    lastLoginAt             DateTime?
+    isLocked                Boolean    @default(false)
+    lockUntil               DateTime?
+
+    // Security & Tracking
+    lastIPAddress           String?
+    loginIPs                String[]   @default([]) // IP history (consider max length or separate model for large history)
+    lastUserAgent           String?    // User-agent tracking
+    geoLocationInfo         Json?      // Optional for audit/analytics
+    failedLoginIPs          Json?      // For rate limiting analysis
+
+    // User Preferences
+    notificationPrefs       Json       @default("{}") // Store as JSON for flexibility
+
+    // OAuth
+    googleId                String?    @unique // Unique Google ID
+    googleAccessToken       String?    // Optional: if you need to access Google APIs on behalf of the user
+    googleRefreshToken      String?    // Optional: if you need long-lived Google API access
+    googleAuthScope         String?    // Store scopes granted by the user
+    appleId                 String?    @unique // For Apple Sign-In
+
+    // Location Information
+    lat                     Decimal?   @db.Decimal(9, 6)
+    lng                     Decimal?   @db.Decimal(9, 6)
+    location                String?
+    geohash                 String?    @db.Char(12)
+    point                   Unsupported("geography(point)")? // Ensure PostGIS extension is enabled for this
+
+    // KYC Information
+    panNumber               String?
+    aadharNumber            String?
+    panCardUrl              String?
+    aadharCardUrl           String?
+    rejectionReason         String?
+
+    // Venue & Rankings
+    venueId                 String?    @unique
+    rankingGlobal           Int?
+    rankingNational         Int?
+    rankingState            Int?
+    rankingDistrict         Int?
+    rankingRegional         Int?
+    rating                  Float?
+
+    // Profile Information
+    profilePictureUrl       String?
+    preferredLanguage       String?
+    timezone                String?
+
+    // Account Recovery (if using custom tokens, otherwise rely on the Token model)
+    // accountRecoveryToken    String?    // This could now be managed by the `Token` model type `PASSWORD_RESET`
+    // accountRecoveryExpires  DateTime?  // This would be `expiresAt` in `Token` model
+
+    // Status Information
+    status                  AccountStatus    @default(ACTIVE)
+    onboardingStatus        OnboardingStatus @default(NOT_STARTED)
+    idDocsComplete          Boolean          @default(false)
+    venueDetailsComplete    Boolean          @default(false)
+    slotsCreated            Boolean          @default(false)
+
+    // Metadata
+    deletedAt               DateTime?
+    deactivatedBy           String?        // Admin who deactivated
+    tags                    String[]       @default([])
+    metadata                Json?          // Flexible storage
+    createdAt               DateTime       @default(now())
+    updatedAt               DateTime       @updatedAt
+
+    // Relations
+    tokens                  Token[]
+    invitations             Invitation[] @relation("AdminInvitations")
+    venue                   Venue[]
+    AuditLogs            AuditLog[]     // Unified logs (assuming AuditLog model)
+    bookings                Booking[]
+    reviews                 Review[]
+    venueUsers              VenueUser[]
+
+    // Indexes
+    @@index([email]) // Already unique, but explicit index is good
+    @@index([phone]) // Already unique, but explicit index is good
+    @@index([googleId]) // Explicit index on unique field is good
+    @@index([appleId]) // Explicit index on unique field is good
+    @@index([lat, lng], name: "account_lat_lng_idx")
+    @@index([location], name: "account_location_idx")
+    @@index([lastLoginAt])
+    @@index([roleId])
+    @@index([status])
+    @@index([isLocked])
+    @@index([createdAt]) // Useful for user growth analysis
+}
+model Venue {
+  id                  String                @id @default(uuid())
+  name                String
+  description         String?
+  address             String
+  city                String
+  state               String
+  zipCode             String
+  country             String
+  phone               String?
+  email               String?               @unique
+  website             String?
+  photos              Json?
+  amenities           Json?
+  operatingHours      Json?
+  status              String                @default("PENDING")
+  ownerId             String
+  owner               Account               @relation(fields: [ownerId], references: [id])
+  sports              Sport[]
+  bookings            Booking[]
+  reviews             Review[]
+  venueUsers          VenueUser[]
+  slots               Slot[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  deletedAt           DateTime?
+  stripeAccountId     String?
+  payoutsEnabled      Boolean               @default(false)
+  taxInfo             Json?
+  bankAccount         Json?
+  currency            String                @default("usd")
+  totalEarnings       Float                 @default(0)
+  monthlyEarnings     Float                 @default(0)
+  yearlyEarnings      Float                 @default(0)
+  commissionRate      Float                 @default(0.1)
+  lastPayout          DateTime?
+  nextPayout          DateTime?
+  payoutSchedule      String                @default("monthly")
+  payoutHistory       Json?
+  notes               String?
+  isVerified          Boolean               @default(false)
+  verifiedAt          DateTime?
+  verifiedBy          String?
+  verificationNotes   String?
+  verificationHistory Json?
+  isFeatured          Boolean               @default(false)
+  featuredAt          DateTime?
+  featuredBy          String?
+  featuredNotes       String?
+  featuredHistory     Json?
+  isDeleted           Boolean               @default(false)
+  deletedBy           String?
+  deletionNotes       String?
+  deletionHistory     Json?
+  restoredAt          DateTime?
+  restoredBy          String?
+  restorationNotes    String?
+  restorationHistory  Json?
+  restoredFrom        String?
+  restoredFromNotes   String?
+  restoredFromHistory Json?
+  restoredFromUser    String?
+  restoredFromUserNotes String?
+  restoredFromUserHistory Json?
+  restoredFromAdmin   String?
+  restoredFromAdminNotes String?
+  restoredFromAdminHistory Json?
+  restoredFromSuperAdmin String?
+  restoredFromSuperAdminNotes String?
+  restoredFromSuperAdminHistory Json?
+  restoredFromSystem  String?
+  restoredFromSystemNotes String?
+  restoredFromSystemHistory Json?
+  restoredFromOwner   String?
+  restoredFromOwnerNotes String?
+  restoredFromOwnerHistory Json?
+  restoredFromVenueManager String?
+  restoredFromVenueManagerNotes String?
+  restoredFromVenueManagerHistory Json?
+  restoredFromVenueUser String?
+  restoredFromVenueUserNotes String?
+  restoredFromVenueUserHistory Json?
+  restoredFromCustomer String?
+  restoredFromCustomerNotes String?
+  restoredFromCustomerHistory Json?
+  restoredFromGuest   String?
+  restoredFromGuestNotes String?
+  restoredFromGuestHistory Json?
+  restoredFromApi     String?
+  restoredFromApiNotes String?
+  restoredFromApiHistory Json?
+  restoredFromUnknown String?
+  restoredFromUnknownNotes String?
+  restoredFromUnknownHistory Json?
+}
+
+
+// ===== Logging =====
+enum LogLevel {
+    TRACE
+    DEBUG
+    INFO
+    WARN
+    ERROR
+    FATAL
+    SUCCESS
+}
+enum ActorType {
+  USER
+  ADMIN
+  SYSTEM // For automated processes, cron jobs, etc.
+  ANONYMOUS // For unauthenticated actions
+}
+
+model AuditLog {
+  id              String      @id @default(uuid())
+  timestamp       DateTime    @default(now()) // Log creation time (UTC recommended)
+  level           LogLevel    // Log level enum (INFO, SUCCESS, WARN, ERROR, FATAL)
+  message         String      // Human-readable summary of the event
+
+  // Originator of the log
+  service         String      // Name of microservice/app (e.g., "booking-service", "auth-service")
+  module          String?     // Module/controller/function (e.g., "AuthController", "BookingService.createBooking")
+  correlationId   String?     // Unique ID for a request, propagated across services (for distributed tracing)
+
+  // Actor Information (who performed the action)
+  actorId         String?     // ID of the actor (user, admin, system process ID)
+  actorType       ActorType   @default(USER) // Type of actor (USER, ADMIN, SYSTEM, ANONYMOUS)
+  actorEmail      String?     // Optional: Email of the actor for quick lookup
+  ipAddress       String?     // Client IP address
+  userAgent       String?     // Client device/browser user-agent string
+
+  // Request Details (if applicable to an HTTP request)
+  httpMethod      String?     // HTTP method (GET, POST, PUT, DELETE)
+  urlPath         String?     // Full URL path accessed
+  statusCode      Int?        // HTTP status code of the response (e.g., 200, 201, 400, 500)
+
+  // Event Details (what happened)
+  action          String      // Specific action performed (e.g., "USER_LOGIN", "VENUE_BOOKED", "PASSWORD_CHANGED", "ACCOUNT_DEACTIVATED")
+  resourceType    String?     // Type of resource affected (e.g., "ACCOUNT", "VENUE", "BOOKING", "PAYMENT")
+  resourceId      String?     // ID of the resource affected (e.g., booking ID, venue ID)
+  oldValue        Json?       // JSON representation of the resource's state BEFORE the action (for updates/deletes)
+  newValue        Json?       // JSON representation of the resource's state AFTER the action (for creates/updates)
+  details         Json?       // Event-specific metadata (e.g., booking details, payment amount)
+  error           Json?       // Structured error block for WARN/ERROR/FATAL levels (e.g., { code: "AUTH_FAILED", message: "Invalid credentials" })
+
+  // Relations
+  account         Account?    @relation(fields: [actorId], references: [id])
+
+  // Indexes for efficient querying
+  @@index([timestamp])
+  @@index([actorId])
+  @@index([level])
+  @@index([correlationId])
+  @@index([service, module])
+  @@index([action])
+  @@index([resourceType, resourceId]) // For quickly finding all actions on a specific resource
+  @@index([actorId, action]) // For quickly finding all actions by a specific actor
+  @@index([ipAddress]) // For security analysis
+}
+// ===== Role Management =====
+enum RoleType {
+    BMSP_SUPER_ADMIN
+    BMSP_ADMIN
+    BMSP_FINANCE_ADMIN
+    BMSP_VENUES_ADMIN
+    BMSP_REGIONAL_VENUES_ADMIN
+    BMSP_BOOKINGS_ADMIN
+    BMSP_CUSTOMER_CARE
+    VENUE_OWNER
+    SECONDARY_VENUE_NAME_MANAGER
+    VENUE_BOOKING_MANAGER
+    VENUE_OPERATIONS_MANAGER
+    ANONYMOUS
+    SYSTEM
+    USER
+}
+
+enum RoleStatus {
+    ACTIVE
+    DEACTIVATED
+}
+
+model Role {
+    id          String   @id @default(uuid())
+    name        String   @unique
+    type        RoleType
+    description String
+    isCustom    Boolean  @default(false)
+
+    // Timestamps
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    createdBy String?
+    status    RoleStatus @default(ACTIVE)
+
+    // Relations
+    rolePermissions RolePermission[]
+    tokens          Token[]
+    Account         Account[]
+
+    @@index([name])
+}
+
+model Permission {
+    id          String  @id @default(uuid())
+    key         String  @unique
+    description String?
+
+    // Relations
+    rolePermissions RolePermission[]
+}
+
+model RolePermission {
+    roleId       String
+    permissionId String
+    allowed      Boolean
+
+    // Relations
+    role       Role       @relation(fields: [roleId], references: [id])
+    permission Permission @relation(fields: [permissionId], references: [id])
+
+    @@id([roleId, permissionId])
+}
+
+// ===== Authentication & Authorization =====
+enum TokenType {
+    ACCESS
+    REFRESH
+    EMAIL_VERIFICATION
+    PHONE_VERIFICATION
+    PASSWORD_RESET
+    INVITATION
+    ACCOUNT_LINKING
+}
+
+model Token {
+    id    String    @id @default(uuid())
+    token String    @unique
+    type  TokenType
+
+    // References
+    accountId    String?
+    roleId       String
+    invitationId String?
+
+    // Metadata
+    expiresAt     DateTime
+    createdAt     DateTime @default(now())
+    updatedAt     DateTime @updatedAt
+    isBlacklisted Boolean  @default(false)
+    device        String?
+    ipAddress     String?
+
+    // Relations
+    account    Account?    @relation(fields: [accountId], references: [id])
+    role       Role        @relation(fields: [roleId], references: [id])
+    invitation Invitation? @relation(fields: [invitationId], references: [id])
+
+    // Indexes
+     @@index([token])
+    @@index([accountId, type])
+    @@index([roleId])
+    @@index([expiresAt]) // Useful for cleanup operations
+    @@index([isBlacklisted]) // Useful for lookup
+}
+
+enum InvitationStatus {
+    PENDING
+    ACCEPTED
+    EXPIRED
+}
+
+model Invitation {
+    id     String           @id @default(uuid())
+    name   String
+    email  String
+    phone  String
+    role   RoleType
+    status InvitationStatus @default(PENDING)
+
+    // References
+    invitedById String?
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    expiresAt DateTime
+
+    // Relations
+    token     Token[]
+    invitedBy Account? @relation("AdminInvitations", fields: [invitedById], references: [id])
+}
+
+// ===== Venue Management =====
+model Sport {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  venues      Venue[]
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  venueId   String
+  venue     Venue    @relation(fields: [venueId], references: [id])
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  startTime DateTime
+  endTime   DateTime
+  status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id        String   @id @default(uuid())
+  venueId   String
+  venue     Venue    @relation(fields: [venueId], references: [id])
+  accountId String
+  account   Account  @relation(fields: [accountId], references: [id])
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VenueUser {
+  id        String  @id @default(uuid())
+  venueId   String
+  venue     Venue   @relation(fields: [venueId], references: [id])
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id])
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+// ===== Slot Management =====
+enum SlotType {
+    CRICKET_MORNING
+    CRICKET_AFTERNOON
+    FOOTBALL_DAILY
+    CUSTOM
+}
+
+enum SlotStatus {
+    AVAILABLE
+    BOOKED
+    MAINTENANCE
+}
+
+model Slot {
+    id String @id @default(uuid())
+
+    // Venue Reference
+    venueId String
+    venue   Venue  @relation(fields: [venueId], references: [id])
+
+    // Timing
+    startTime DateTime
+    endTime   DateTime
+
+    // Pricing
+    price    Decimal @db.Decimal(10, 2)
+    currency String  @default("INR")
+
+    // Booking Status
+    isBooked Boolean   @default(false)
+    bookerId String?
+    bookedAt DateTime?
+
+    // Cancellation Policy
+    cancellationPolicy   String? // e.g., "flexible", "moderate", "strict"
+    cancellationDeadline Int? // Hours before booking when cancellation is allowed
+
+    // Slot Configuration
+    slotType SlotType
+    status   SlotStatus @default(AVAILABLE)
+
+    // Recurrence
+    recurrence RecurrencePattern?
+
+    // Timestamps
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    // Indexes
+    @@index([startTime, endTime], name: "slot_time_idx")
+    @@index([venueId], name: "slot_venue_idx")
+    @@index([isBooked], name: "slot_is_booked_idx")
+    @@index([slotType])
+}
+
+// ===== Recurrence Management =====
+enum RecurrenceType {
+    DAILY
+    WEEKLY
+    CUSTOM_DAYS
+}
+
+enum EndCondition {
+    NEVER
+    AFTER_OCCURRENCES
+    SPECIFIC_DATE
+}
+
+model RecurrencePattern {
+    id String @id @default(uuid())
+
+    // Slot Reference
+    slotId String @unique
+    slot   Slot   @relation(fields: [slotId], references: [id])
+
+    // Pattern Configuration
+    recurrenceType RecurrenceType
+    interval       Int? // Repeat every X days/weeks
+    daysOfWeek     String[] // For weekly recurrence (e.g., ["MON", "WED"])
+
+    // End Conditions
+    endCondition    EndCondition
+    occurrenceCount Int? // End after X occurrences
+    endDate         DateTime? // End by specific date
+
+    // Exceptions
+    exceptions RecurrenceException[]
+}
+
+model RecurrenceException {
+    id String @id @default(uuid())
+
+    // Pattern Reference
+    patternId String
+    pattern   RecurrencePattern @relation(fields: [patternId], references: [id])
+
+    // Exception Details
+    originalDate     DateTime
+    newDate          DateTime?
+    isCancelled      Boolean   @default(false)
+    modificationNote String?
+}

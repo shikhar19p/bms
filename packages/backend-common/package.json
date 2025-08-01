@@ -1,0 +1,60 @@
+{
+  "name": "@workspace/backend-common",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": " tsc ",
+    "dev": "tsc --noEmit --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/cls-hooked": "^4.3.9",
+    "@types/uuid": "^10.0.0",
+    "@workspace/db": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "axios": "^1.10.0",
+    "cls-hooked": "^4.2.2",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "http-status-codes": "^2.3.0",
+    "ioredis": "^5.6.1",
+    "pg": "^8.16.3",
+    "redis": "^5.6.0",
+    "twilio": "^5.7.2",
+    "uuid": "^11.1.0",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0",
+    "winston-elasticsearch": "^0.19.0",
+    "winston-transport": "^4.9.0",
+    "zod": "^3.24.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.4.1",
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20",
+    "@types/pg": "^8.15.4",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "typescript": "^5.8.3"
+  },
+  "exports": {
+    "./config": "./src/config/index.ts",
+    "./data-access/redis": "./src/data-access/redis/index.ts",
+    "./sms": "./src/sms/index.ts",
+    "./metrics/*": "./src/metrics/*.ts",
+    "./scheduler/*": "./src/scheduler/*.ts",
+    "./http-error": "./src/error/base/index.ts",
+    "./error/domain/*": "./src/error/domain/*/index.ts",
+    "./cache/*": "./src/cache/*.ts",
+    "./logger": "./src/logger/index.ts",
+    "./middleware": "./src/middleware/index.ts",
+    "./utils": "./src/utils/index.ts",
+    "./ws": "./src/ws/index.ts"
+  }
+}
